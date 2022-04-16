@@ -1,0 +1,26 @@
+#include <iostream>
+#include "Color.h"
+#include "Vec3.h"
+
+int main()
+{
+	// Image
+	const int imageWidth{ 256 };
+	const int imageHeight{ 256 };
+
+	// Render PPM image
+	// P3: Colours are in ASCII. 255 for max colour. RGB triples.
+	std::cout << "P3" << '\n' << imageWidth << " " << imageHeight << '\n' << "255" << '\n';
+
+	// Write out the colours top to bottom, left to right
+	for (int i = imageHeight - 1; i >= 0; --i)
+	{
+		for (int j = 0; j < imageWidth; ++j)
+		{
+			color3 pixelColor(double(i) / (imageWidth - 1), double(j) / (imageHeight - 1), 0.25);
+			writeColor(std::cout, pixelColor);
+		}
+	}
+
+	return 0;
+}
