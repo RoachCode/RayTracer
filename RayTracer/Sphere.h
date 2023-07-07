@@ -7,16 +7,17 @@ class Sphere : public Hittable
 public:
 	point3 center;
 	double radius{};
-	shared_ptr<Material> materialPtr;
+	shared_ptr<Material> matPtr;
 
+	// This crashes the program, it has 3 instead of 2 arguments. for now.
 	Sphere() {}
-	Sphere(point3 cen, double r, shared_ptr<Material> m) 
-		: center(cen), radius(r), materialPtr(m) {};
-
+	Sphere(point3 cen, double r, shared_ptr<Material> m)
+		: center(cen), radius(r), matPtr(m) {};
+	
 	virtual bool hit(const ray& r, double tMin, double tMax, hitRecord& rec) const override;
 };
 
-bool Sphere::hit(const ray& r, double tMin, double tMax, hitRecord& rec) const
+bool Sphere::hit(const ray& r, double tMin, double tMax, hitRecord& rec) const 
 {
 	Vec3 oc = r.origin() - center;
 	auto a = r.direction().lengthSquared();
@@ -39,7 +40,7 @@ bool Sphere::hit(const ray& r, double tMin, double tMax, hitRecord& rec) const
 	rec.p = r.at(rec.t);
 	Vec3 outwardNormal = (rec.p - center) / radius;
 	rec.setFaceNormal(r, outwardNormal);
-	rec.materialPtr = materialPtr;
+	rec.matPtr = matPtr;
 
 	return true;
 }

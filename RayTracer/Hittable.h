@@ -3,20 +3,19 @@
 #include "Weekend.h"
 
 class Material;
-
 struct hitRecord
 {
-	point3 p;
-	Vec3 normal;
-	shared_ptr<Material> materialPtr;
+	point3 p{};
+	Vec3 normal{};
+	shared_ptr<Material> matPtr;
 	double t{};
-	bool frontFace{false};
+	bool frontFace{ false };
 
 	inline void setFaceNormal(const ray& r, const Vec3& outwardNormal)
 	{
 		frontFace = dot(r.direction(), outwardNormal) < 0;
 		// I have changed this. ref. listing 18. chapter 6.4.
-		normal = frontFace ? outwardNormal : (- 1 * outwardNormal);
+		normal = frontFace ? outwardNormal : (-1 * outwardNormal);
 	}
 };
 

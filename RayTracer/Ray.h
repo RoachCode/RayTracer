@@ -1,7 +1,7 @@
 #pragma once
 #include "Vec3.h"
 
-class ray 
+class ray
 {
 public:
     point3 orig;

@@ -1,9 +1,9 @@
 #pragma once
 #include "Vec3.h"
-#include <iostream>
+#include "Pixel.h"
 
 //utility function to write a single pixel's color out to the standard output stream. 
-void writeColor(std::ostream& out, color3 pixelColor, int samplesPerPixel)
+void writeColor(color3 pixelColor, int samplesPerPixel)
 {
     auto r = pixelColor.x();
     auto g = pixelColor.y();
@@ -16,8 +16,9 @@ void writeColor(std::ostream& out, color3 pixelColor, int samplesPerPixel)
     b = sqrt(scale * b);
 
     // Write the translated [0,255] value of each colour component.
-    // TODO switch to uint8_t
-    out << static_cast<int>(256 * clamp(r, 0.0, 0.999)) << ' '
-        << static_cast<int>(256 * clamp(g, 0.0, 0.999)) << ' '
-        << static_cast<int>(256 * clamp(b, 0.0, 0.999)) << '\n';
+    pixelArray.insert(static_cast<sf::Uint8>(256 * clamp(r, 0.0, 0.999)),
+                      static_cast<sf::Uint8>(256 * clamp(g, 0.0, 0.999)), 
+                      static_cast<sf::Uint8>(256 * clamp(b, 0.0, 0.999)));
+
+
 }

@@ -21,7 +21,7 @@ public:
 #pragma region operatorOverloading
 
 	// Adds the values of a Vec3 to the existing Vec3
-	Vec3 &operator += (const Vec3 &v)
+	Vec3& operator += (const Vec3& v)
 	{
 		e[0] += v.e[0];
 		e[1] += v.e[1];
@@ -30,7 +30,7 @@ public:
 	}
 
 	// Multiplies each value in the Vec3 by const double 't'
-	Vec3 &operator *= (const double t)
+	Vec3& operator *= (const double t)
 	{
 		e[0] *= t;
 		e[1] *= t;
@@ -38,49 +38,49 @@ public:
 	}
 
 	// Divides each value in the Vec3 by const double 't'
-	Vec3 &operator /= (const double t)
+	Vec3& operator /= (const double t)
 	{
 		return *this *= 1 / t;
 	}
 
 	// Outputs Vec3 values to the standard output stream delimited by ' ' spaces
-	inline friend std::ostream &operator << (std::ostream& out, const Vec3& v) 
+	inline friend std::ostream& operator << (std::ostream& out, const Vec3& v)
 	{
 		return out << v.e[0] << ' ' << v.e[1] << ' ' << v.e[2];
 	}
 
 	// Adds two Vec3 together. 'u' stands for utility
-	inline friend Vec3 operator + (const Vec3& u, const Vec3& v) 
+	inline friend Vec3 operator + (const Vec3& u, const Vec3& v)
 	{
 		return Vec3(u.e[0] + v.e[0], u.e[1] + v.e[1], u.e[2] + v.e[2]);
 	}
 
 	// Takes two Vec3. Subtracts the 2nd Vec3 from the first.
-	inline friend Vec3 operator - (const Vec3& u, const Vec3& v) 
+	inline friend Vec3 operator - (const Vec3& u, const Vec3& v)
 	{
 		return Vec3(u.e[0] - v.e[0], u.e[1] - v.e[1], u.e[2] - v.e[2]);
 	}
 
 	// Multiplies two Vec3 together if both arguments are Vec3
-	inline friend Vec3 operator * (const Vec3& u, const Vec3& v) 
+	inline friend Vec3 operator * (const Vec3& u, const Vec3& v)
 	{
 		return Vec3(u.e[0] * v.e[0], u.e[1] * v.e[1], u.e[2] * v.e[2]);
 	}
 
 	// Multiplies a double and Vec3, returns Vec3
-	inline friend Vec3 operator * (double t, const Vec3& v) 
+	inline friend Vec3 operator * (double t, const Vec3& v)
 	{
 		return Vec3(t * v.e[0], t * v.e[1], t * v.e[2]);
 	}
 
 	// Multiplies a Vec3 and double, returns double. I don't know how this works TODO
-	inline friend Vec3 operator * (const Vec3& v, double t) 
+	inline friend Vec3 operator * (const Vec3& v, double t)
 	{
 		return t * v;
 	}
 
 	// Divides a Vec3 by a double, returns double. I don't know how this works TODO
-	inline friend Vec3 operator / (Vec3 v, double t) 
+	inline friend Vec3 operator / (Vec3 v, double t)
 	{
 		return (1 / t) * v;
 	}
@@ -104,7 +104,7 @@ public:
 	}
 
 	// Multiplies each corresponding value of two Vec3 together, returns a Vec3
-	inline friend double dot(const Vec3& u, const Vec3& v) 
+	inline friend double dot(const Vec3& u, const Vec3& v)
 	{
 		return u.e[0] * v.e[0]
 			+ u.e[1] * v.e[1]
@@ -112,7 +112,7 @@ public:
 	}
 
 	// I assume this takes a line and returns a perpendicular line
-	inline friend Vec3 cross(const Vec3& u, const Vec3& v) 
+	inline friend Vec3 cross(const Vec3& u, const Vec3& v)
 	{
 		return Vec3(u.e[1] * v.e[2] - u.e[2] * v.e[1],
 			u.e[2] * v.e[0] - u.e[0] * v.e[2],
@@ -150,9 +150,38 @@ public:
 		return unitVector(randomInUnitSphere());
 	}
 
+	bool nearZero() const 
+	{
+		// Return true if the vector is close to zero in all dimensions.
+		const auto s = 1e-8;
+		return (fabs(e[0]) < s) && (fabs(e[1]) < s) && (fabs(e[2]) < s);
+	}
+
+	friend Vec3 reflect(const Vec3& v, const Vec3& n) 
+	{
+		return v - 2 * dot(v, n) * n;
+	}
+
+	friend Vec3 refract(const Vec3& uv, const Vec3& n, double etaiOverEtat)
+	{
+		auto cosTheta = fmin(dot((- 1 * uv), n), 1.0);
+		Vec3 rOutPerp = etaiOverEtat * (uv + (cosTheta * n));
+		Vec3 rOutParallel = -sqrt(fabs(1.0 - rOutPerp.lengthSquared())) * n;
+		return rOutPerp = rOutParallel;
+	}
+
+	static Vec3 randomInUnitDisk() 
+	{
+		while (true) 
+		{
+			auto p = Vec3(randomDouble(-1, 1), randomDouble(-1, 1), 0);
+			if (p.lengthSquared() >= 1) continue;
+			return p;
+		}
+	}
 #pragma endregion
 
 };
 
 using point3 = Vec3;   // 3D point
-using color3 = Vec3;    // RGB color
+using color3 = Vec3;    // RGB color#pragma once
